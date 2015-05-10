@@ -15,8 +15,8 @@ bool on = 1;              //led state
 void setup()
 {
    LightsSetUp();          //start up the leds
-  Serial.begin(9600);    //debug
-  SetBckGrndC(255,255,255);//set the background to white
+   //Serial.begin(9600);    //debug
+   SetBckGrndC(255,255,255);//set the background to white
 }
 
 void loop()
@@ -35,7 +35,7 @@ void loop()
   
   if(oldServo != servo){    //is it worth checking the servo states
       if(servo < 250 && State != 0){//if the servo is at the lower position and this isn't a repeat
-        Serial.println(Type);  //debug  
+        //Serial.println(Type);  //debug  
         State = 0;          //set the state so that we don't continusly enter this statement
         if(Type > MAX_TYPES){//have we reach the maximum amount of types  
            Type = 0;        //yes, lets og back to the first type
@@ -81,6 +81,4 @@ void loop()
   }
    
 }
-
-
 
