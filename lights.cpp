@@ -16,6 +16,8 @@ uint32_t BColor;                //the nackground color
 int pos = 0;                    //posintion of the flashing
 int j=0;                        //needed for rainbow
 int q=0;                        //needed for rainbow
+int Hoverc = 0;                 //counter for hover effect
+bool HoverI = true;             //varible to see if we are increasing or decreasing
 
 
 
@@ -55,10 +57,10 @@ void AirCraftFlashB(){          //function to run the red green white chasing
         if(pos+i < ARM_LED_COUNT){//position will go past the number of leds on the arm so that 
                                       //we can gently erase the dot. So we need to check to make sure we are still within the arm
           //setting the next pixe for the colored dot
-          setArm(0,pos+i,strip.Color(0,255,0));    //for arm 1
+          setArm(2,pos+i,strip.Color(0,255,0));    //for arm 1
           setArm(1,pos+i,strip.Color(255,0,0));    //arm 2
-          setArm(2,pos+i,strip.Color(255,255,255));//arm 3
-          setArm(2,pos+i,strip.Color(255,255,255));//arm 4
+          setArm(0,pos+i,strip.Color(255,255,255));//arm 3
+          setArm(3,pos+i,strip.Color(255,255,255));//arm 4
         }
       }
     }
@@ -67,15 +69,37 @@ void AirCraftFlashB(){          //function to run the red green white chasing
     pos = -DOT_SIZE;// set the position counter to before the arm for a gracfull entrence
   }
   strip.show();              //show the prettiness
-  delay(40);//give it a puase
+  delay(AIR_CRAFT_FLASH_B_DELAY);//give it a puase
 }
 
 void RedGreenWhite(){
   for(int i=0;i < ARM_LED_COUNT;i++){//change all the leds to reflect the new color
-      setArm(0,i,strip.Color(0,255,0));    //for arm 1
+      setArm(2,i,strip.Color(0,255,0));    //for arm 1
       setArm(1,i,strip.Color(255,0,0));    //arm 2
-      setArm(2,i,strip.Color(255,255,255));//arm 3
-      setArm(2,i,strip.Color(255,255,255));//arm 4
+      setArm(0,i,strip.Color(255,255,255));//arm 3
+      setArm(3,i,strip.Color(255,255,255));//arm 4
+  }
+  strip.show();
+}
+
+void Hover(){
+  
+  if(HoverI){
+    Hoverc += 5;
+  }else{
+    Hoverc -= 5;
+  }
+  for(int i=0;i<ARM_LED_COUNT;i++){
+    setArm(0,i,strip.Color(0,(Hoverc),Hoverc));
+    setArm(1,i,strip.Color(0,(Hoverc),Hoverc));
+    setArm(2,i,strip.Color(0,(Hoverc),(Hoverc*.5)));
+    setArm(3,i,strip.Color(0,(Hoverc),(Hoverc*.5)));
+  }
+  
+  if(Hoverc >= 255){
+    HoverI = false;
+  }else if(Hoverc <= 0){
+   HoverI = true; 
   }
   strip.show();
 }
@@ -83,9 +107,8 @@ void RedGreenWhite(){
 void setArm(int arm,int led, uint32_t color){
   int p = (arm * 2 * ARM_LED_COUNT) + led;      //find begining of the one side of the arm, 
                                                 //then find the led that needs to be changed.
-  //Serial.println(p);
   strip.setPixelColor(p,color);               //set the led
-  p += ARM_LED_COUNT;                         //find the other side of the arm
+  p = (arm * 2 * ARM_LED_COUNT + ARM_LED_COUNT) - led;//find the other side of the arm
   strip.setPixelColor(p,color);               //set the led
 }
 
@@ -101,7 +124,7 @@ void theaterChaseRainbow() {
         }
         strip.show();
        
-        delay(80);
+        delay(THEATER_CHASE_RAINBOW_DELAY);
        
         for (int i=0; i < strip.numPixels(); i=i+3) {
           strip.setPixelColor(i+q, 0);        //turn every third pixel off
