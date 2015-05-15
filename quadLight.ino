@@ -1,7 +1,7 @@
 #include <Adafruit_NeoPixel.h>
 #include "lights.h"
 
-#define MAX_TYPES 3
+#define MAX_TYPES 4
 
 
 
@@ -16,6 +16,7 @@ void setup()
 {
    LightsSetUp();          //start up the leds
    //Serial.begin(9600);    //debug
+   pinMode(2, INPUT);      //set the pin for servo signal
    SetBckGrndC(255,255,255);//set the background to white
 }
 
@@ -33,9 +34,9 @@ void loop()
   }
   count++;                  //incriment the counter
   
+        //Serial.println(Type);  //debug 
   if(oldServo != servo){    //is it worth checking the servo states
-      if(servo < 250 && State != 0){//if the servo is at the lower position and this isn't a repeat
-        //Serial.println(Type);  //debug  
+      if(servo < 250 && State != 0){//if the servo is at the lower position and this isn't a repeat 
         State = 0;          //set the state so that we don't continusly enter this statement
         if(Type > MAX_TYPES){//have we reach the maximum amount of types  
            Type = 0;        //yes, lets og back to the first type
@@ -72,6 +73,9 @@ void loop()
       case 3:               //stedy red green white
         RedGreenWhite();    //start the effect
       break;                //nothing else to check, sto the switch case
+      case 4:
+        Hover();
+      break;
       default: 
         SetBckGrndC(255,255,255);//set the background
       break;                //nothing else to check, sto the switch case
