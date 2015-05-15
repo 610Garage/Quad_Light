@@ -1,4 +1,0 @@
-Servo single is read on pin 2.
-led single is on pin 6
-This code requires Adafruit NeoPixel library. It can be downloaded here:
-https://github.com/adafruit/Adafruit_NeoPixel
